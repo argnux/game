@@ -7,7 +7,7 @@ include_directories(SDL2Test ${SDL2_INCLUDE_DIRS})
 
 # FIXME: temporary, later it will be library
 add_executable(engine main.cpp
-        ApplicationEngine.cpp
-        ApplicationEngine.h)
+        ApplicationWindow.cpp
+        ApplicationWindow.h)
 
 target_link_libraries(engine SDL2::SDL2)

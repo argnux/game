@@ -5,7 +5,7 @@
 #include <iostream>
 #include "SDL2/SDL.h"
 
-#include "ApplicationEngine.h"
+#include "ApplicationWindow.h"
 
 int main() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -13,7 +13,7 @@ int main() {
         return 1;
     }
 
-    Engine::ApplicationEngine app("Test");
+    Engine::ApplicationWindow app("Test", 1280, 720);
 
     return app.exec();
 }
