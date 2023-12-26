@@ -1,13 +1,16 @@
 cmake_minimum_required(VERSION 3.27)
-project(engine VERSION 0.1)
+project(game VERSION 0.1)
 
-find_package(SDL2 REQUIRED CONFIG REQUIRED COMPONENTS SDL2)
+find_package(SDL2 REQUIRED)
 
 include_directories(SDL2Test ${SDL2_INCLUDE_DIRS})
+include_directories(engine/include)
+include_directories(game_src)
 
-# FIXME: temporary, later it will be library
-add_executable(engine main.cpp
-        ApplicationWindow.cpp
-        ApplicationWindow.h)
+add_subdirectory(${CMAKE_SOURCE_DIR}/engine)
 
-target_link_libraries(engine SDL2::SDL2)
+add_executable(game game_src/main.cpp
+        game_src/GameApplication.cpp
+)
+
+target_link_libraries(game engine ${SDL2_LIBRARIES} SDL2_image)
