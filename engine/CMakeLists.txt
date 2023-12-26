@@ -1,8 +1,8 @@
 project(engine VERSION 0.1)
 
 add_library(engine
-        RendererWindow.cpp
-        TextureStorage.cpp
+        src/RendererWindow.cpp
+        src/TextureStorage.cpp
         src/sprite/Sprite.cpp
         src/sprite/CreatureSprite.cpp
         src/object/Player.cpp
