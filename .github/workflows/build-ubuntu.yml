@@ -31,7 +31,7 @@ jobs:
       - name: 'Update packages'
         run: |
           sudo apt update
-          sudo apt install libsdl2-dev libsdl2-image-dev -y
+          sudo apt install libsdl2-dev libsdl2-image-dev ninja -y
 
       - name: 'Build'
         run: |
