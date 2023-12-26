@@ -34,7 +34,9 @@ jobs:
           sudo apt install libsdl2-dev libsdl2-image-dev -y
 
       - name: 'Build'
-        run: cmake --build ./cmake-build-debug --target game -j 6
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
 
       - name: 'Upload engine library'
         if: github.event.inputs.upload_lib == 'true' || github.ref == 'main'
