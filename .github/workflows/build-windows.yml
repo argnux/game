@@ -1,4 +1,4 @@
-name: 'Ubuntu'
+name: 'Windows'
 
 on:
   workflow_dispatch:
@@ -22,16 +22,11 @@ on:
 
 jobs:
   build:
-    name: 'Build for Ubuntu'
-    runs-on: ubuntu-latest
+    name: 'Build for Windows'
+    runs-on: windows-latest
 
     steps:
       - uses: actions/checkout@v3
-
-      - name: 'Update packages'
-        run: |
-          sudo apt update
-          sudo apt install ninja-build -y
 
       - name: 'Build SDL2'
         run: |
@@ -39,9 +34,9 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja
+          cmake .. -DCMAKE_BUILD_TYPE=Release
           cmake --build . --config Release -j 6
-          sudo cmake --install . --config Release
+          cmake --install . --config Release
 
       - name: 'Build SDL2_image'
         run: |
@@ -49,15 +44,16 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja
+          cmake .. -DCMAKE_BUILD_TYPE=Release
           cmake --build . --config Release -j 6
-          sudo cmake --install . --config Release
+          cmake --install . --config Release
 
       - name: 'Build'
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
-          chmod a+x ${{github.workspace}}/cmake-build-debug/game
+          chmod +x ${{github.workspace}}/cmake-build-debug/game
+          ls ${{github.workspace}}/cmake-build-debug/engine
 
       - name: 'Upload engine library'
         if: github.event.inputs.upload_lib == 'true' || github.ref == 'refs/heads/main'
@@ -71,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'game_${{github.run_number}}'
-          path: '${{github.workspace}}/cmake-build-debug/game'
+          path: '${{github.workspace}}/cmake-build-debug/game.exe'
