@@ -57,7 +57,6 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
-          chmod a+x ${{github.workspace}}/cmake-build-debug/game
 
       - name: 'Upload engine library'
         if: github.event.inputs.upload_lib == 'true' || github.ref == 'refs/heads/main'
