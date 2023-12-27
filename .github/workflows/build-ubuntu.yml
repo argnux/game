@@ -39,8 +39,8 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja
-          cmake --install . --config Release -j 6
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja --parallel 6
+          cmake --install . --config Release
 
       - name: 'Build SDL2_image'
         run: |
@@ -48,8 +48,8 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja
-          cmake --install . --config Release -j 6
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja --parallel 6
+          cmake --install . --config Release
 
       - name: 'Build'
         run: |
