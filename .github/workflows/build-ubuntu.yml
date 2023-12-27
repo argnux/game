@@ -31,7 +31,25 @@ jobs:
       - name: 'Update packages'
         run: |
           sudo apt update
-          sudo apt install libsdl2-dev libsdl2-image-dev ninja-build -y
+          sudo apt install ninja-build -y
+
+      - name: 'Build SDL2'
+        run: |
+          git clone https://github.com/libsdl-org/SDL.git -b SDL2
+          cd SDL
+          mkdir build
+          cd build
+          cmake .. DCMAKE_BUILD_TYPE=Release -G Ninja --parallel
+          cmake --install . --config Release
+
+      - name: 'Build SDL2_image'
+        run: |
+          git clone https://github.com/libsdl-org/SDL_image.git -b SDL2
+          cd SDL_image
+          mkdir build
+          cd build
+          cmake .. DCMAKE_BUILD_TYPE=Release -G Ninja --parallel
+          cmake --install . --config Release
 
       - name: 'Build'
         run: |
