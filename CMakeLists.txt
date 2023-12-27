@@ -4,8 +4,6 @@ project(game VERSION 0.1)
 find_package(SDL2 REQUIRED)
 
 include_directories(SDL2Test ${SDL2_INCLUDE_DIRS})
-message("${SDL2_INCLUDE_DIRS}")
-message("${SDL2_LIBRARIES}")
 include_directories(engine/include)
 include_directories(game_src)
 
@@ -15,4 +13,4 @@ add_executable(game game_src/main.cpp
         game_src/GameApplication.cpp
 )
 
-target_link_libraries(game engine SDL2::SDL2main SDL2::SDL2 SDL2_image)
+target_link_libraries(game engine ${SDL2_LIBRARIES} SDL2_image)
