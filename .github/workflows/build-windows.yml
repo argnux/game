@@ -50,7 +50,7 @@ jobs:
 
       - name: 'Build'
         run: |
-          cmake -DCMAKE_CXX_FLAGS=-I${{github.workspace}}/SDL2/include -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL2 -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           ls ${{github.workspace}}/cmake-build-debug/engine/Debug
 
