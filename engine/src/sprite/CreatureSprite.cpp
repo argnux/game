@@ -4,6 +4,8 @@
 
 #include "sprite/CreatureSprite.h"
 
+#include <cmath>
+
 namespace Game {
     CreatureSprite::CreatureSprite(RendererWindow &rendererWindow) : Sprite(rendererWindow)
     {
