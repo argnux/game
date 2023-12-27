@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 find_package(SDL2 REQUIRED)
+find_package(SDL2_image REQUIRED)
+message("${SDL2_IMAGE_LIBRARIES}")
 
 include_directories(SDL2Test ${SDL2_INCLUDE_DIRS})
 include_directories(engine/include)

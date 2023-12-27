@@ -52,14 +52,13 @@ jobs:
         run: |
           cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL2 -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
-          ls ${{github.workspace}}/cmake-build-debug/engine/Debug
 
       - name: 'Upload engine library'
         if: github.event.inputs.upload_lib == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'libengine.a'
-          path: '${{github.workspace}}/cmake-build-debug/engine/libengine.a'
+          path: '${{github.workspace}}/cmake-build-debug/engine/Debug/engine.lib'
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
