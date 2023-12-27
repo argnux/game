@@ -1,4 +1,4 @@
-name: 'Build and test'
+name: 'Ubuntu'
 
 on:
   workflow_dispatch:
@@ -22,7 +22,7 @@ on:
 
 jobs:
   build:
-    name: 'Ubuntu'
+    name: 'Build for Ubuntu'
     runs-on: ubuntu-latest
 
     steps:
@@ -59,15 +59,15 @@ jobs:
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
 
       - name: 'Upload engine library'
-        if: github.event.inputs.upload_lib == 'true' || github.ref == 'main'
+        if: github.event.inputs.upload_lib == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'libengine.a'
           path: '${{github.workspace}}/cmake-build-debug/engine/libengine.a'
 
       - name: 'Upload game'
-        if: github.event.inputs.upload_game == 'true' || github.ref == 'main'
+        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'game_${{github.run_number}}'
-          path: '${{github.workspace}}/cmake-build-debug/engine/libengine.a'
+          path: '${{github.workspace}}/cmake-build-debug/game'
