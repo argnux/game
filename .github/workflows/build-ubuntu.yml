@@ -1,0 +1,73 @@
+name: 'Build and test'
+
+on:
+  workflow_dispatch:
+    inputs:
+      upload_lib:
+        type: boolean
+        description: 'Upload engine library'
+        required: false
+        default: false
+      upload_game:
+        type: boolean
+        description: 'Upload game'
+        required: false
+        default: false
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    name: 'Ubuntu'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: 'Update packages'
+        run: |
+          sudo apt update
+          sudo apt install ninja-build -y
+
+      - name: 'Build SDL2'
+        run: |
+          git clone https://github.com/libsdl-org/SDL.git -b SDL2
+          cd SDL
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja
+          cmake --build . --config Release -j 6
+          sudo cmake --install . --config Release
+
+      - name: 'Build SDL2_image'
+        run: |
+          git clone https://github.com/libsdl-org/SDL_image.git -b SDL2
+          cd SDL_image
+          mkdir build
+          cd build
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja
+          cmake --build . --config Release -j 6
+          sudo cmake --install . --config Release
+
+      - name: 'Build'
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
+
+      - name: 'Upload engine library'
+        if: github.event.inputs.upload_lib == 'true' || github.ref == 'main'
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: 'libengine.a'
+          path: '${{github.workspace}}/cmake-build-debug/engine/libengine.a'
+
+      - name: 'Upload game'
+        if: github.event.inputs.upload_game == 'true' || github.ref == 'main'
+        uses: actions/upload-artifact@v3.1.0
+        with:
+          name: 'game_${{github.run_number}}'
+          path: '${{github.workspace}}/cmake-build-debug/engine/libengine.a'
