@@ -5,7 +5,6 @@
 #include "sprite/Sprite.h"
 
 #include <algorithm>
-#include <cmath>
 
 namespace Game {
     void Sprite::loadTexture(SDL_Texture *texture) {
