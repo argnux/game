@@ -11,4 +11,4 @@ add_library(engine
         src/sprite/BuildingSprite.cpp
 )
 
-target_link_libraries(engine ${SDL2_LIBRARIES} SDL2_image)
+target_link_libraries(engine SDL2::SDL2main SDL2::SDL2 SDL2_image)

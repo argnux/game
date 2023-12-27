@@ -4,8 +4,7 @@ project(game VERSION 0.1)
 find_package(SDL2 REQUIRED)
 
 include_directories(SDL2Test ${SDL2_INCLUDE_DIRS})
-message("${SDL2_INCLUDE_DIRS}")
-message("${SDL2_LIBRARIES}")
+
 include_directories(engine/include)
 include_directories(game_src)
 
