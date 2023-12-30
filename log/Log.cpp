@@ -18,5 +18,6 @@ void Log::setupLogger() {
         level = static_cast<LogLevel>(std::atoi(envLogLevel));
     }
 
+    SDL_LogSetAllPriority(static_cast<SDL_LogPriority>(LogLevel::Error));
     SDL_LogSetPriority(static_cast<SDL_LogCategory>(CATEGORY), static_cast<SDL_LogPriority>(level));
 }

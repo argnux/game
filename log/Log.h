@@ -9,6 +9,14 @@
 #include <sstream>
 #include <memory>
 
+/*
+ * Set current log level using environment variable LOG_LEVEL.
+ * By default, only error messages will be shown.
+ * LogLevel::Debug: LOG_LEVEL <= 2
+ * LogLevel::Info: LOG_LEVEL <= 3
+ * LogLevel::Warning: LOG_LEVEL <= 4
+ * LogLevel::Error: LOG_LEVEL <= 5
+ */
 enum class LogLevel {
     Debug = SDL_LOG_PRIORITY_DEBUG,
     Info = SDL_LOG_PRIORITY_INFO,
