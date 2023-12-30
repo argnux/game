@@ -33,9 +33,9 @@ jobs:
           sudo apt update
           sudo apt install ninja-build -y
 
-      - name: 'Build SDL2'
+      - name: 'Build SDL3'
         run: |
-          git clone https://github.com/libsdl-org/SDL.git -b SDL2
+          git clone https://github.com/libsdl-org/SDL.git -b main
           cd SDL
           mkdir build
           cd build
@@ -43,9 +43,9 @@ jobs:
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
-      - name: 'Build SDL2_image'
+      - name: 'Build SDL3_image'
         run: |
-          git clone https://github.com/libsdl-org/SDL_image.git -b SDL2
+          git clone https://github.com/libsdl-org/SDL_image.git -b main
           cd SDL_image
           mkdir build
           cd build
@@ -62,12 +62,12 @@ jobs:
         if: github.event.inputs.upload_lib == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: 'libengine.a'
+          name: 'engine_linux_${{github.run_number}}'
           path: '${{github.workspace}}/cmake-build-debug/engine/libengine.a'
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: 'game_${{github.run_number}}'
+          name: 'game_linux_${{github.run_number}}'
           path: '${{github.workspace}}/cmake-build-debug/game'

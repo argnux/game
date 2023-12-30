@@ -5,7 +5,7 @@
 #ifndef ENGINE_SPRITE_H
 #define ENGINE_SPRITE_H
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include "RendererWindow.h"
 
@@ -35,7 +35,7 @@ namespace Game {
         int size_multiplier_{};
         SDL_Texture *texture_{};
 
-        SDL_Rect src_{};
+        SDL_FRect src_{};
         SDL_FRect dst_{};
 
     private:

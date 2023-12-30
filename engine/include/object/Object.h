@@ -11,7 +11,7 @@
 #include <memory>
 #include <utility>
 
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 namespace Game {
     class RendererWindow;

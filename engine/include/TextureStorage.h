@@ -8,8 +8,8 @@
 #include <string>
 #include <map>
 
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
 
 namespace Game {
     class RendererWindow;
@@ -20,7 +20,6 @@ namespace Game {
         ~TextureStorage();
 
         bool load(const std::string& objectName, const std::string &texturePath);
-        void unload(const std::string &objectName);
         SDL_Texture* get(const std::string &objectName);
 
     private:

@@ -2,14 +2,15 @@
 // Created by dmytro-nedavnii on 12/26/23.
 //
 
+#include <iostream>
 #include "RendererWindow.h"
 #include "object/Object.h"
 #include "object/Player.h"
 
 namespace Game {
     RendererWindow::RendererWindow(const std::string &windowName, int width, int height)
-        : window_{SDL_CreateWindow(windowName.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_SHOWN)},
-          renderer_{SDL_CreateRenderer(window_, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)},
+        : window_{SDL_CreateWindow(windowName.c_str(), width, height, SDL_EVENT_WINDOW_SHOWN)},
+          renderer_{SDL_CreateRenderer(window_, nullptr, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)},
           storage_{*this}
     {
 
@@ -31,7 +32,7 @@ namespace Game {
             display();
         }
 
-        SDL_Quit();
+        atexit(SDL_Quit);
 
         return 0;
     }
@@ -65,13 +66,13 @@ namespace Game {
     void RendererWindow::handleEvents() {
         while (SDL_PollEvent(&event_)) {
             switch (event_.type) {
-                case SDL_QUIT:
+                case SDL_EVENT_QUIT:
                     is_running_ = false;
                     break;
-                case SDL_KEYDOWN:
+                case SDL_EVENT_KEY_DOWN:
                     handleKeyboard();
                     break;
-                case SDL_KEYUP:
+                case SDL_EVENT_KEY_UP:
 //                        handleKeyboardRelease();
                     break;
 //                case SDL_MOUSEMOTION:
@@ -79,7 +80,7 @@ namespace Game {
 //                    motion_.y = event_.motion.y;
 //                    handleMouse();
 //                    break;
-                case SDL_MOUSEBUTTONDOWN:
+                case SDL_EVENT_MOUSE_BUTTON_DOWN:
                     handleMouse();
                     break;
             }
