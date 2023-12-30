@@ -8,8 +8,6 @@
 #include "RendererWindow.h"
 
 #include <string>
-#include <memory>
-#include <utility>
 
 #include <SDL3/SDL.h>
 

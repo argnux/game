@@ -3,6 +3,7 @@
 //
 
 #include "object/Item.h"
+#include "Log.h"
 
 namespace Game {
     Item::Item(const std::string &objectName, RendererWindow &rendererWindow)
@@ -10,6 +11,7 @@ namespace Game {
     {
         sprite_.loadTexture(renderer_window_.getTextureStorage().get(objectName));
         sprite_.init();
+        Log(LogLevel::Debug) << "Item created: " << objectName;
     }
 
     void Item::display() {

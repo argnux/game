@@ -16,6 +16,10 @@ enum class LogLevel {
     Error = SDL_LOG_PRIORITY_ERROR
 };
 
+enum class LogCategory {
+    Game = SDL_LOG_CATEGORY_CUSTOM
+};
+
 class Log {
 public:
     template<typename... Args>
@@ -39,8 +43,10 @@ public:
         return *this;
     }
 
+    static void setupLogger();
+
 private:
-    static const SDL_LogCategory CATEGORY = SDL_LOG_CATEGORY_APPLICATION;
+    static const LogCategory CATEGORY = LogCategory::Game;
     LogLevel level_;
     std::stringstream message_{};
 };

@@ -4,27 +4,30 @@
 
 #include "TextureStorage.h"
 #include "RendererWindow.h"
-#include <iostream>
+#include "Log.h"
 
 namespace Game {
     TextureStorage::TextureStorage(RendererWindow &window) : window_{window} {
-
+        Log(LogLevel::Debug) << "TextureStorage created.";
     }
 
     TextureStorage::~TextureStorage() {
         for (auto &[key, value] : textures_) {
             SDL_DestroyTexture(value);
         }
+        Log(LogLevel::Debug) << "TextureStorage destroyed.";
     }
 
     bool TextureStorage::load(const std::string& objectName, const std::string &texturePath) {
         SDL_Texture *texture = IMG_LoadTexture(window_.getRenderer(), texturePath.c_str());
         if (texture == nullptr) {
-            std::cerr << "Cannot load an image: " << texturePath << "\n";
+            Log(LogLevel::Error) << "Cannot load an image: " << texturePath;
             return false;
         }
 
         textures_.insert({objectName, texture});
+
+        Log(LogLevel::Debug) << "Texture loaded: " << texturePath;
         return true;
     }
 

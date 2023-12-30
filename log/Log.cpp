@@ -9,5 +9,14 @@ Log::Log(LogLevel level) {
 }
 
 Log::~Log() {
-    SDL_LogMessage(CATEGORY, static_cast<SDL_LogPriority>(level_), "%s\n", message_.str().c_str());
+    SDL_LogMessage(static_cast<SDL_LogCategory>(CATEGORY), static_cast<SDL_LogPriority>(level_), "%s\n", message_.str().c_str());
+}
+
+void Log::setupLogger() {
+    LogLevel level = LogLevel::Error;
+    if (auto envLogLevel = SDL_getenv("LOG_LEVEL")) {
+        level = static_cast<LogLevel>(std::atoi(envLogLevel));
+    }
+
+    SDL_LogSetPriority(static_cast<SDL_LogCategory>(CATEGORY), static_cast<SDL_LogPriority>(level));
 }
