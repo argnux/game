@@ -33,7 +33,7 @@ jobs:
           sudo apt update
           sudo apt install ninja-build -y
 
-      - name: 'Build SDL2'
+      - name: 'Build SDL3'
         run: |
           git clone https://github.com/libsdl-org/SDL.git -b main
           cd SDL
@@ -43,7 +43,7 @@ jobs:
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
-      - name: 'Build SDL2_image'
+      - name: 'Build SDL3_image'
         run: |
           git clone https://github.com/libsdl-org/SDL_image.git -b main
           cd SDL_image

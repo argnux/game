@@ -28,12 +28,6 @@ namespace Game {
         return true;
     }
 
-    void TextureStorage::unload(const std::string &objectName) {
-        auto it = textures_.find(objectName);
-        SDL_DestroyTexture(it->second);
-        textures_.erase(it);
-    }
-
     SDL_Texture *TextureStorage::get(const std::string &objectName) {
         auto it = textures_.find(objectName);
         if (it != textures_.end()) return it->second;

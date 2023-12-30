@@ -26,7 +26,7 @@ namespace Game {
 
     SDL_FPoint Sprite::getClampedCoordinates(SDL_FPoint point) {
         int windowWidth, windowHeight;
-        SDL_GetRendererOutputSize(renderer_window_.getRenderer(), &windowWidth, &windowHeight);
+        SDL_GetCurrentRenderOutputSize(renderer_window_.getRenderer(), &windowWidth, &windowHeight);
 
         SDL_FPoint clamped;
         clamped.x = std::clamp(point.x, 0.f, windowWidth - dst_.w);
@@ -36,7 +36,7 @@ namespace Game {
 
     SDL_FPoint Sprite::getClampedCenterCoordinates(SDL_FPoint point) {
         int windowWidth, windowHeight;
-        SDL_GetRendererOutputSize(renderer_window_.getRenderer(), &windowWidth, &windowHeight);
+        SDL_GetCurrentRenderOutputSize(renderer_window_.getRenderer(), &windowWidth, &windowHeight);
 
         SDL_FPoint clamped;
         clamped.x = std::clamp(point.x, 0.f + dst_.w * 0.5f, windowWidth - dst_.w * 0.5f);
@@ -45,10 +45,10 @@ namespace Game {
     }
 
     void Sprite::display() {
-        SDL_RenderCopyF(renderer_window_.getRenderer(), texture_, &src_, &dst_);
+        SDL_RenderTexture(renderer_window_.getRenderer(), texture_, &src_, &dst_);
     }
 
     bool Sprite::collisionWith(const Sprite& other) {
-        return SDL_HasIntersectionF(&dst_, &other.dst_);
+        return SDL_HasRectIntersectionFloat(&dst_, &other.dst_);
     }
 } // Game
