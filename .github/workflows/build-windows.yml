@@ -30,27 +30,27 @@ jobs:
 
       - name: 'Build SDL2'
         run: |
-          git clone https://github.com/libsdl-org/SDL.git -b SDL2
+          git clone https://github.com/libsdl-org/SDL.git -b main
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL2
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL3
           cmake --build . --config Release -j 6
           cmake --install . --config Release
 
       - name: 'Build SDL2_image'
         run: |
-          git clone https://github.com/libsdl-org/SDL_image.git -b SDL2
+          git clone https://github.com/libsdl-org/SDL_image.git -b main
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL2
+          cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL3
           cmake --build . --config Release -j 6
           cmake --install . --config Release
 
       - name: 'Build'
         run: |
-          cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL2 -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL3 -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
 
       - name: 'Upload engine library'
