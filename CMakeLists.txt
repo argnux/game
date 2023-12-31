@@ -25,26 +25,13 @@ add_executable(game game_src/main.cpp
 target_link_libraries(game PRIVATE log engine SDL3_image::SDL3_image-shared SDL3::SDL3-shared)
 
 install(CODE [[
-  function(install_library_with_deps LIBRARY)
+  function(install_library LIBRARY)
     file(INSTALL
       DESTINATION "${CMAKE_INSTALL_PREFIX}"
       TYPE SHARED_LIBRARY
       FOLLOW_SYMLINK_CHAIN
       FILES "${LIBRARY}"
     )
-    file(GET_RUNTIME_DEPENDENCIES
-      LIBRARIES ${LIBRARY}
-      RESOLVED_DEPENDENCIES_VAR RESOLVED_DEPS
-      UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
-    )
-    foreach(FILE ${RESOLVED_DEPS})
-      if(NOT IS_SYMLINK ${FILE})
-        install_library_with_deps(${FILE})
-      endif()
-    endforeach()
-    foreach(FILE ${UNRESOLVED_DEPS})
-      message(STATUS "Unresolved from ${LIBRARY}: ${FILE}")
-    endforeach()
   endfunction()
   file(GET_RUNTIME_DEPENDENCIES
     EXECUTABLES  $<TARGET_FILE:game>
@@ -52,7 +39,7 @@ install(CODE [[
     UNRESOLVED_DEPENDENCIES_VAR UNRESOLVED_DEPS
   )
   foreach(FILE ${RESOLVED_DEPS})
-    install_library_with_deps(${FILE})
+    install_library(${FILE})
   endforeach()
   foreach(FILE ${UNRESOLVED_DEPS})
     message(STATUS "Unresolved: ${FILE}")
