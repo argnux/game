@@ -19,8 +19,6 @@ jobs:
   build:
     name: 'Build for Ubuntu'
     runs-on: ubuntu-latest
-    env:
-      GAME_PATH: ${{github.workspace}}/game
 
     steps:
       - uses: actions/checkout@v3
@@ -36,7 +34,7 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=$GAME_PATH/SDL3
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL3
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
@@ -46,19 +44,19 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH=$GAME_PATH/SDL3 -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=$GAME_PATH/SDL3
+          cmake .. -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL3 -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL3
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
       - name: 'Build'
         run: |
-          cmake -DCMAKE_PREFIX_PATH=$GAME_PATH/SDL3 -DCMAKE_INSTALL_PREFIX=$GAME_PATH -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL3 -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/game -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
-          cmake --install .
+          cmake --install ${{github.workspace}}/cmake-build-debug
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'game_linux_${{github.run_number}}'
-          path: '$GAME_PATH'
+          path: '${{github.workspace}}/game'
