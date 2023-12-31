@@ -5,9 +5,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-find_package(SDL3 REQUIRED)
+find_package(SDL3 REQUIRED CONFIG COMPONENTS SDL3)
+find_package(SDL3_image REQUIRED CONFIG)
 
-include_directories(SDL3Test ${SDL3_INCLUDE_DIRS})
+include_directories(SDL3Test ${SDL3_INCLUDE_DIRS} ${SDL3_IMAGE_INCLUDE_DIRS})
 include_directories(log)
 include_directories(engine/include)
 include_directories(game_src)
@@ -21,7 +22,7 @@ add_executable(game game_src/main.cpp
         game_src/GameApplication.cpp
 )
 
-target_link_libraries(game log engine ${SDL3_LIBRARIES} SDL3_image)
+target_link_libraries(game PRIVATE log engine SDL3_image::SDL3_image-shared SDL3::SDL3-shared)
 
 install(CODE [[
   function(install_library_with_deps LIBRARY)
