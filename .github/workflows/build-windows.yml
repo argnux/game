@@ -36,6 +36,8 @@ jobs:
           cmake --install . --config Release
 
       - name: 'Build SDL3_image'
+        env:
+          SDL3_DIR: '$GAME_PATH/SDL3/cmake'
         run: |
           git clone https://github.com/libsdl-org/SDL_image.git -b main
           cd SDL_image
