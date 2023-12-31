@@ -36,14 +36,12 @@ jobs:
           cmake --install . --config Release
 
       - name: 'Build SDL3_image'
-        env:
-          SDL3_DIR: '$GAME_PATH/SDL3/cmake'
         run: |
           git clone https://github.com/libsdl-org/SDL_image.git -b main
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH=$GAME_PATH/SDL3 -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$GAME_PATH/SDL3
+          cmake .. -DSDL3_ROOT_DIR=$GAME_PATH/SDL3 -DSDL3_LIBRARIES=$GAME_PATH/SDL3/lib -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=$GAME_PATH/SDL3
           cmake --build . --config Release -j 6
           cmake --install . --config Release
 
@@ -51,6 +49,7 @@ jobs:
         run: |
           cmake -DCMAKE_PREFIX_PATH=$GAME_PATH/SDL3 -DCMAKE_INSTALL_PREFIX=$GAME_PATH -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
+          cmake --install .
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
