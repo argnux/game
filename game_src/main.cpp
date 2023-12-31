@@ -2,22 +2,22 @@
 // Created by dmytro-nedavnii on 12/23/23.
 //
 
-#include <iostream>
 #include <SDL3/SDL.h>
-//#include <SDL3/SDL_main.h>
 #include <SDL3_image/SDL_image.h>
-//#undef main
 
 #include "GameApplication.h"
+#include "Log.h"
 
 int main() {
+    Log::setupLogger();
+
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+        Log(LogLevel::Error) << "SDL_Init: " << SDL_GetError();
         return 1;
     }
 
     if (!(IMG_Init(IMG_INIT_PNG))) {
-        std::cout << "IMG_Init Error: " << SDL_GetError() << std::endl;
+        Log(LogLevel::Error) << "IMG_Init: " << SDL_GetError();
         return 2;
     }
 

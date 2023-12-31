@@ -2,9 +2,9 @@
 // Created by dmytro-nedavnii on 12/26/23.
 //
 
-#include <iostream>
 #include "object/Player.h"
 #include "object/Item.h"
+#include "Log.h"
 
 namespace Game {
     Player::Player(const std::string &objectName, RendererWindow& rendererWindow)
@@ -12,6 +12,7 @@ namespace Game {
     {
         sprite_.loadTexture(renderer_window_.getTextureStorage().get(objectName));
         sprite_.init();
+        Log(LogLevel::Debug) << "Player created: " << objectName;
     }
 
     void Player::display() {
@@ -30,7 +31,7 @@ namespace Game {
         for (auto &[key, value] : objects) {
             if (auto item = dynamic_cast<Item *>(value.get())) {
                 if (sprite_.collisionWith(item->sprite_) && key == "sword1") {
-                    std::cout << "found sword!\n";
+                    Log(LogLevel::Debug) << "found sword.";
                 }
             }
         }

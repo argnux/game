@@ -8,6 +8,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(SDL3 REQUIRED)
 
 include_directories(SDL3Test ${SDL3_INCLUDE_DIRS})
+include_directories(log)
 include_directories(engine/include)
 include_directories(game_src)
 
@@ -15,10 +16,11 @@ if (MSVC)
     link_directories(${CMAKE_PREFIX_PATH}/lib)
 endif (MSVC)
 
+add_subdirectory(${CMAKE_SOURCE_DIR}/log)
 add_subdirectory(${CMAKE_SOURCE_DIR}/engine)
 
 add_executable(game game_src/main.cpp
         game_src/GameApplication.cpp
 )
 
-target_link_libraries(game engine ${SDL3_LIBRARIES} SDL3_image)
+target_link_libraries(game log engine ${SDL3_LIBRARIES} SDL3_image)

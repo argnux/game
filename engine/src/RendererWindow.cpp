@@ -2,10 +2,10 @@
 // Created by dmytro-nedavnii on 12/26/23.
 //
 
-#include <iostream>
 #include "RendererWindow.h"
 #include "object/Object.h"
 #include "object/Player.h"
+#include "Log.h"
 
 namespace Game {
     RendererWindow::RendererWindow(const std::string &windowName, int width, int height)
@@ -13,12 +13,13 @@ namespace Game {
           renderer_{SDL_CreateRenderer(window_, nullptr, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)},
           storage_{*this}
     {
-
+        Log(LogLevel::Debug) << "RenderWindow created.";
     }
 
     RendererWindow::~RendererWindow() {
         SDL_DestroyRenderer(renderer_);
         SDL_DestroyWindow(window_);
+        Log(LogLevel::Debug) << "RenderWindow destroyed.";
     }
 
     int RendererWindow::exec() {
@@ -38,7 +39,11 @@ namespace Game {
     }
 
     void RendererWindow::registerObject(const std::string &objectName, const std::string &texturePath) {
-        storage_.load(objectName, texturePath);
+        if (!storage_.load(objectName, texturePath)) {
+            Log(LogLevel::Error) << "Cannot register object: " << objectName;
+        } else {
+            Log(LogLevel::Debug) << "Object registered: " << objectName;
+        }
     }
 
     void RendererWindow::display() {
