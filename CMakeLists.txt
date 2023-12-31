@@ -12,7 +12,7 @@ include_directories(log)
 include_directories(engine/include)
 include_directories(game_src)
 
-link_directories(${CMAKE_PREFIX_PATH}/lib)
+#link_directories(${CMAKE_PREFIX_PATH}/lib)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/log)
 add_subdirectory(${CMAKE_SOURCE_DIR}/engine)

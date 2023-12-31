@@ -47,7 +47,7 @@ jobs:
         run: |
           cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL3 -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/game -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
-          cmake --install ${{github.workspace}}/cmake-build-debug
+          cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
