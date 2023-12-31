@@ -36,7 +36,7 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{GAME_PATH}}/SDL3
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=$GAME_PATH/SDL3
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
@@ -46,13 +46,13 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{GAME_PATH}}/SDL3
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=$GAME_PATH/SDL3
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
       - name: 'Build'
         run: |
-          cmake -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL3 -DCMAKE_INSTALL_PREFIX=${{GAME_PATH}} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_PREFIX_PATH=$GAME_PATH/SDL3 -DCMAKE_INSTALL_PREFIX=$GAME_PATH -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
 
       - name: 'Upload game'
@@ -60,4 +60,4 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'game_linux_${{github.run_number}}'
-          path: '${{GAME_PATH}}'
+          path: '$GAME_PATH'
