@@ -25,8 +25,8 @@ jobs:
 
       - name: 'Build SDL3'
         run: |
-          mkdir game
-          mv (!game) game/
+          mv * ../
+          cd ../
           git clone https://github.com/libsdl-org/SDL.git -b main
           cd SDL
           mkdir build
@@ -37,7 +37,7 @@ jobs:
 
       - name: 'Build SDL3_image'
         run: |
-          rm -rf SDL
+          cd ../
           git clone https://github.com/libsdl-org/SDL_image.git -b main
           cd SDL_image
           mkdir build
@@ -48,13 +48,10 @@ jobs:
 
       - name: 'Build'
         run: |
-          rm -rf SDL_image
-          cd game
-          cmake -DCMAKE_INSTALL_PREFIX=${{github.workspace}} -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}}/game -B ${{github.workspace}}/game/cmake-build-debug
-          cmake --build ${{github.workspace}}/game/cmake-build-debug --target game -j 6
+          cd ../
+          cmake -DCMAKE_INSTALL_PREFIX=${{github.workspace}} -DCMAKE_BUILD_TYPE=Debug -S ${{github.workspace}}/.. -B ${{github.workspace}}/../cmake-build-debug
+          cmake --build ${{github.workspace}}/../cmake-build-debug --target game -j 6
           cmake --install .
-          cd ..
-          rm -rf game/
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
