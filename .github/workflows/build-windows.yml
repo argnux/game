@@ -54,12 +54,10 @@ jobs:
 
       - name: 'Archive game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        run: |
-          Compress-Archive -Path ${{ env.GAME_PATH }} -Destination game.zip
+        run: Compress-Archive -Path ${{ env.GAME_PATH }} -Destination game_win64_${{github.run_number}}.zip
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: 'game_win64_${{github.run_number}}'
-          path: '${{github.workspace}}/game.zip'
+          path: '${{github.workspace}}/game_win64_${{github.run_number}}.zip'

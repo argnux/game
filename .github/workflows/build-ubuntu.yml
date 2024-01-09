@@ -59,18 +59,14 @@ jobs:
 
       - name: 'Link libraries'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        run: |
-          chrpath -l ${{ env.GAME_PATH }}/bin/game
-          chrpath -r ./ ${{ env.GAME_PATH }}/bin/game
+        run: chrpath -r ./ ${{ env.GAME_PATH }}/bin/game
 
       - name: 'Archive game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        run: |
-          tar -cvf game.tar ${{ env.GAME_PATH }}
+        run: tar -cvf game_linux_${{github.run_number}}.tar game
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
-          name: 'game_linux_${{github.run_number}}'
-          path: '${{github.workspace}}/game.tar'
+          path: '${{github.workspace}}/game_linux_${{github.run_number}}.tar'
