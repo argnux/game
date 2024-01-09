@@ -65,7 +65,7 @@ jobs:
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        uses: alehechka/upload-tarartifact
+        uses: alehechka/upload-tartifact@v2
         with:
           name: ${{ env.OUTPUT }}
           path: ${{ env.GAME_PATH }}/*
