@@ -38,7 +38,7 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_PATH }}
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_PATH }}
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
@@ -48,14 +48,16 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }} -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_IMAGE_PATH }}
+          cmake .. -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }} -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_IMAGE_PATH }}
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
       - name: 'Re-link libraries'
         run: |
+          ldd ${{ env.SDL3_IMAGE_PATH }}/lib/libSDL3_image.so
           export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{ env.SDL3_PATH }}/lib:${{ env.SDL3_IMAGE_PATH }}/lib
           sudo ldconfig
+          ldd ${{ env.SDL3_IMAGE_PATH }}/lib/libSDL3_image.so
 
       - name: 'Build'
         run: |
