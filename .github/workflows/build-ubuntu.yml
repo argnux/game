@@ -19,6 +19,10 @@ jobs:
   build:
     name: 'Build for Ubuntu'
     runs-on: ubuntu-latest
+    env:
+      SDL3_PATH: ${{github.workspace}}/SDL3
+      SDL3_IMAGE_PATH: ${{github.workspace}}/SDL3_image
+      GAME_PATH: ${{github.workspace}}/game
 
     steps:
       - uses: actions/checkout@v3
@@ -34,7 +38,7 @@ jobs:
           cd SDL
           mkdir build
           cd build
-          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL3
+          cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_PATH }}
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
@@ -44,18 +48,18 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH=${{github.workspace}}/SDL3 -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/SDL3_image
+          cmake .. -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }} -DCMAKE_BUILD_TYPE=Release -G Ninja  -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_IMAGE_PATH }}
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
       - name: 'Re-link libraries'
         run: |
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{github.workspace}}/SDL3/lib:${{github.workspace}}/SDL3_image/lib
+          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{ env.SDL3_PATH }}/lib:${{ env.SDL3_IMAGE_PATH }}/lib
           sudo ldconfig
 
       - name: 'Build'
         run: |
-          cmake -DCMAKE_INSTALL_PREFIX=${{github.workspace}}/game -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }};${{ env.SDL3_IMAGE_PATH }} -DCMAKE_INSTALL_PREFIX=${{ env.GAME_PATH }} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
 
@@ -64,4 +68,4 @@ jobs:
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'game_linux_${{github.run_number}}'
-          path: '${{github.workspace}}/game'
+          path: '${{ env.GAME_PATH }}'
