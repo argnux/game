@@ -57,7 +57,6 @@ jobs:
           cmake -DCMAKE_PREFIX_PATH="${{ env.SDL3_PATH }}" -DCMAKE_INSTALL_PREFIX=${{ env.GAME_PATH }} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
-          ln -s ${{ env.GAME_PATH }}/bin/game ${{ env.GAME_PATH }}/game
 
       - name: 'Link libraries'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
@@ -67,6 +66,7 @@ jobs:
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         run: |
           cd ${{ env.GAME_PATH }}
+          ln -s ./bin/game ./game
           tar -cvf ${{github.workspace}}/${{ env.OUTPUT }}.tar *
 
       - name: 'Upload game'
