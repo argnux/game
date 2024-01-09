@@ -25,6 +25,8 @@ namespace Game {
     private:
         RendererWindow& window_;
         std::map<std::string, SDL_Texture *> textures_;
+
+        static const std::string RESOURCE_PATH;
     };
 
 } // Game

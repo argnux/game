@@ -4,4 +4,4 @@ add_library(log
     Log.cpp
 )
 
-target_link_libraries(log ${SDL3_LIBRARIES})
+target_link_libraries(log PRIVATE SDL3::SDL3-shared)

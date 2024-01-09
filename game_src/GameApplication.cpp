@@ -13,10 +13,8 @@ GameApplication::GameApplication(const std::string &windowName, int width, int h
 }
 
 void GameApplication::registerAll() {
-    using Game::Object;
-
-    window_.registerObject("player", "/home/dmytro-nedavnii/git/game/res/png/player.png");
-    window_.registerObject("sword", "/home/dmytro-nedavnii/git/game/res/png/sword.png");
+    window_.registerObject("player", "player.png");
+    window_.registerObject("sword", "sword.png");
 }
 
 void GameApplication::createAll() {
