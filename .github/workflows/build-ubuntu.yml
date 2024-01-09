@@ -63,9 +63,15 @@ jobs:
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         run: chrpath -r ./bin ${{ env.GAME_PATH }}/bin/game
 
+      - name: 'Create tarball'
+        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
+        run: |
+          cd ${{ env.GAME_PATH }}
+          tar -cvf ${{github.workspace}}/${{ env.OUTPUT }}.tar *
+
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        uses: alehechka/upload-tartifact@v2
+        uses: actions/upload-artifact@v3.1.0
         with:
           name: ${{ env.OUTPUT }}
-          path: ${{ env.GAME_PATH }}/*
+          path: ${{ env.OUTPUT }}.tar
