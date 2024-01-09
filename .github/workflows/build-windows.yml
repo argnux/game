@@ -52,9 +52,14 @@ jobs:
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
 
+      - name: 'Archive game'
+        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
+        run: |
+          Compress-Archive -Path ${{ env.GAME_PATH }} -Destination game.zip
+
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
         uses: actions/upload-artifact@v3.1.0
         with:
           name: 'game_win64_${{github.run_number}}'
-          path: '${{ env.GAME_PATH }}'
+          path: '${{github.workspace}}/game.zip'
