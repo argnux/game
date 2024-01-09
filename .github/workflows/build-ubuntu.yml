@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       SDL3_PATH: ${{github.workspace}}/SDL3
-      SDL3_IMAGE_PATH: ${{github.workspace}}/SDL3_image
       GAME_PATH: ${{github.workspace}}/game
 
     steps:
@@ -48,20 +47,13 @@ jobs:
           cd SDL_image
           mkdir build
           cd build
-          cmake .. -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }} -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_IMAGE_PATH }}
+          cmake .. -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }} -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_PATH }}
           cmake --build . --config Release -j 6
           sudo cmake --install . --config Release
 
-      - name: 'Re-link libraries'
-        run: |
-          ldd ${{ env.SDL3_IMAGE_PATH }}/lib/libSDL3_image.so
-          export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${{ env.SDL3_PATH }}/lib:${{ env.SDL3_IMAGE_PATH }}/lib
-          sudo ldconfig
-          ldd ${{ env.SDL3_IMAGE_PATH }}/lib/libSDL3_image.so
-
       - name: 'Build'
         run: |
-          cmake -DCMAKE_PREFIX_PATH="${{ env.SDL3_PATH }};${{ env.SDL3_IMAGE_PATH }}" -DCMAKE_INSTALL_PREFIX=${{ env.GAME_PATH }} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
+          cmake -DCMAKE_PREFIX_PATH="${{ env.SDL3_PATH }}" -DCMAKE_INSTALL_PREFIX=${{ env.GAME_PATH }} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
 
