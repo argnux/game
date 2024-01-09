@@ -51,7 +51,6 @@ jobs:
         run: |
           ldd ${{ env.SDL3_IMAGE_PATH }}/bin/SDL3_image.dll
           set PATH=$PATH:${{ env.SDL3_PATH }}/bin:${{ env.SDL3_IMAGE_PATH }}/bin
-          ldconfig
           ldd ${{ env.SDL3_IMAGE_PATH }}/bin/SDL3_image.dll
 
       - name: 'Build'
