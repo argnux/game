@@ -53,9 +53,10 @@ jobs:
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
 
-      - name: 'Create symlink'
-        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        run: New-Item -ItemType SymbolicLink -Path "${{ env.GAME_PATH }}/game.lnk" -Target "${{ env.GAME_PATH }}/bin/game.exe"
+#      TODO: try to fix later
+#      - name: 'Create symlink'
+#        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
+#        run: New-Item -ItemType SymbolicLink -Path "${{ env.GAME_PATH }}/game.lnk" -Target "${{ env.GAME_PATH }}/bin/game.exe"
 
       - name: 'Upload game'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'

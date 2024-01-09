@@ -58,9 +58,9 @@ jobs:
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
 
-      - name: 'Link libraries'
-        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-        run: chrpath -r ./bin ${{ env.GAME_PATH }}/bin/game
+#      - name: 'Link libraries'
+#        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
+#        run: chrpath -r ./bin ${{ env.GAME_PATH }}/bin/game
 
       - name: 'Create tarball'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
