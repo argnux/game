@@ -30,7 +30,7 @@ jobs:
       - name: 'Update packages'
         run: |
           sudo apt update
-          sudo apt install ninja-build chrpath -y
+          sudo apt install ninja-build -y
 
       - name: 'Build SDL3'
         run: |
@@ -40,7 +40,7 @@ jobs:
           cd build
           cmake .. -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_PATH }}
           cmake --build . --config Release -j 6
-          sudo cmake --install . --config Release
+          cmake --install . --config Release
 
       - name: 'Build SDL3_image'
         run: |
@@ -50,17 +50,13 @@ jobs:
           cd build
           cmake .. -DCMAKE_PREFIX_PATH=${{ env.SDL3_PATH }} -DCMAKE_BUILD_TYPE=Release -G Ninja -DCMAKE_INSTALL_PREFIX=${{ env.SDL3_PATH }}
           cmake --build . --config Release -j 6
-          sudo cmake --install . --config Release
+          cmake --install . --config Release
 
       - name: 'Build'
         run: |
           cmake -DCMAKE_PREFIX_PATH="${{ env.SDL3_PATH }}" -DCMAKE_INSTALL_PREFIX=${{ env.GAME_PATH }} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
-
-#      - name: 'Link libraries'
-#        if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
-#        run: chrpath -r ./bin ${{ env.GAME_PATH }}/bin/game
 
       - name: 'Create tarball'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
