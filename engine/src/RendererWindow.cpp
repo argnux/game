@@ -9,10 +9,16 @@
 
 namespace Game {
     RendererWindow::RendererWindow(const std::string &windowName, int width, int height)
-        : window_{SDL_CreateWindow(windowName.c_str(), width, height, SDL_EVENT_WINDOW_SHOWN)},
-          renderer_{SDL_CreateRenderer(window_, nullptr, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC)},
-          storage_{*this}
+        : storage_{*this}
     {
+        window_ = SDL_CreateWindow(windowName.c_str(), width, height, SDL_EVENT_WINDOW_SHOWN | SDL_WINDOW_OPENGL);
+        Log(LogLevel::Debug) << "SDL_Window created.";
+
+        renderer_ = SDL_CreateRenderer(window_, nullptr, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+        SDL_RendererInfo rendererInfo;
+        SDL_GetRendererInfo(renderer_, &rendererInfo);
+        Log(LogLevel::Debug) << "SDL_Renderer created. Render driver is '" << rendererInfo.name << "'";
+
         Log(LogLevel::Debug) << "RenderWindow created.";
     }
 

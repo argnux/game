@@ -20,6 +20,17 @@ int main() {
         Log(LogLevel::Error) << "Init Image subsystem error.";
         return 2;
     }
+    Log(LogLevel::Debug) << SDL_GetCurrentVideoDriver();
+
+    Log(LogLevel::Debug) << "Video drivers available:";
+    for (int i = 0; i < SDL_GetNumVideoDrivers(); i++) {
+        Log(LogLevel::Debug) << SDL_GetVideoDriver(i);
+    }
+
+    Log(LogLevel::Debug) << "Render drivers available:";
+    for (int i = 0; i < SDL_GetNumRenderDrivers(); i++) {
+        Log(LogLevel::Debug) << SDL_GetRenderDriver(i);
+    }
 
     atexit([](){
         IMG_Quit();
