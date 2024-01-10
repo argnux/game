@@ -7,6 +7,8 @@
 #include "Log.h"
 
 namespace Game {
+    const std::string TextureStorage::RESOURCE_PATH{std::string(SDL_GetBasePath()) + "../res/png/"};
+
     TextureStorage::TextureStorage(RendererWindow &window) : window_{window} {
         Log(LogLevel::Debug) << "TextureStorage created.";
     }
@@ -19,15 +21,16 @@ namespace Game {
     }
 
     bool TextureStorage::load(const std::string& objectName, const std::string &texturePath) {
-        SDL_Texture *texture = IMG_LoadTexture(window_.getRenderer(), texturePath.c_str());
+        const std::string fullTexturePath = RESOURCE_PATH + texturePath;
+        SDL_Texture *texture = IMG_LoadTexture(window_.getRenderer(), fullTexturePath.c_str());
         if (texture == nullptr) {
-            Log(LogLevel::Error) << "Cannot load an image: " << texturePath;
+            Log(LogLevel::Error) << SDL_GetError();
             return false;
         }
 
         textures_.insert({objectName, texture});
 
-        Log(LogLevel::Debug) << "Texture loaded: " << texturePath;
+        Log(LogLevel::Debug) << "Texture loaded: " << fullTexturePath;
         return true;
     }
 
