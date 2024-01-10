@@ -22,6 +22,8 @@ namespace Game {
         bool load(const std::string& objectName, const std::string &texturePath);
         SDL_Texture* get(const std::string &objectName);
 
+        void cleanup();
+
     private:
         RendererWindow& window_;
         std::map<std::string, SDL_Texture *> textures_;

@@ -14,9 +14,6 @@ namespace Game {
     }
 
     TextureStorage::~TextureStorage() {
-        for (auto &[key, value] : textures_) {
-            SDL_DestroyTexture(value);
-        }
         Log(LogLevel::Debug) << "TextureStorage destroyed.";
     }
 
@@ -24,7 +21,7 @@ namespace Game {
         const std::string fullTexturePath = RESOURCE_PATH + texturePath;
         SDL_Texture *texture = IMG_LoadTexture(window_.getRenderer(), fullTexturePath.c_str());
         if (texture == nullptr) {
-            Log(LogLevel::Error) << SDL_GetError();
+            Log(LogLevel::Error) << "Couldn't load an image: " << fullTexturePath;
             return false;
         }
 
@@ -39,5 +36,12 @@ namespace Game {
         if (it != textures_.end()) return it->second;
 
         return nullptr;
+    }
+
+    void TextureStorage::cleanup() {
+        for (auto &[key, value] : textures_) {
+            SDL_DestroyTexture(value);
+            Log(LogLevel::Debug) << "Texture destroyed for object: " << key;
+        }
     }
 } // Game

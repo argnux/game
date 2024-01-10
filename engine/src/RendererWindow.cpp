@@ -17,6 +17,7 @@ namespace Game {
     }
 
     RendererWindow::~RendererWindow() {
+        storage_.cleanup();
         SDL_DestroyRenderer(renderer_);
         SDL_DestroyWindow(window_);
         Log(LogLevel::Debug) << "RenderWindow destroyed.";
@@ -32,8 +33,6 @@ namespace Game {
             // update game_src state, draw the current frame
             display();
         }
-
-        atexit(SDL_Quit);
 
         return 0;
     }

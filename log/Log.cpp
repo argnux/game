@@ -4,11 +4,17 @@
 
 #include "Log.h"
 
+#include <SDL3/SDL_error.h>
+
 Log::Log(LogLevel level) {
     level_ = level;
 }
 
 Log::~Log() {
+    if (SDL_strlen(SDL_GetError())) {
+        SDL_LogMessage(static_cast<SDL_LogCategory>(CATEGORY), static_cast<SDL_LogPriority>(LogLevel::Error), "Possible cause: %s\n", SDL_GetError());
+        SDL_ClearError();
+    }
     SDL_LogMessage(static_cast<SDL_LogCategory>(CATEGORY), static_cast<SDL_LogPriority>(level_), "%s\n", message_.str().c_str());
 }
 

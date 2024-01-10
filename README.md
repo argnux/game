@@ -8,7 +8,7 @@ cmake --build ./build --target install --config Release -j 6
 ```
 _Note: you need to install SDL3 and SDL3_image before building and specify CMAKE_PREFIX_PATH if needed._
 
-# Run
+# Run (_from release archive_)
 
 ### Windows
 - Extract .zip to some directory.

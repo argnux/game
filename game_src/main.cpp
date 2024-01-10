@@ -11,15 +11,20 @@
 int main() {
     Log::setupLogger();
 
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        Log(LogLevel::Error) << "SDL_Init: " << SDL_GetError();
+    if (SDL_InitSubSystem(SDL_INIT_VIDEO) != 0) {
+        Log(LogLevel::Error) << "Init Video subsystem error.";
         return 1;
     }
 
-    if (!(IMG_Init(IMG_INIT_PNG))) {
-        Log(LogLevel::Error) << "IMG_Init: " << SDL_GetError();
+    if (!(IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG)) {
+        Log(LogLevel::Error) << "Init Image subsystem error.";
         return 2;
     }
+
+    atexit([](){
+        IMG_Quit();
+        SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    });
 
     GameApplication app("Testing", 1280, 720);
 
