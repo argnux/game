@@ -24,7 +24,7 @@ namespace Game {
         const std::string fullTexturePath = RESOURCE_PATH + texturePath;
         SDL_Texture *texture = IMG_LoadTexture(window_.getRenderer(), fullTexturePath.c_str());
         if (texture == nullptr) {
-            Log(LogLevel::Error) << "Cannot load an image: " << fullTexturePath;
+            Log(LogLevel::Error) << SDL_GetError();
             return false;
         }
 
