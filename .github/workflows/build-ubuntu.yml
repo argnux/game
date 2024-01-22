@@ -61,7 +61,7 @@ jobs:
       - name: 'Test'
         run: |
           cmake --build ${{github.workspace}}/cmake-build-debug --target game_test -j 6
-          ${{github.workspace}}/cmake-build-debug/game_test
+          cd ${{github.workspace}}/cmake-build-debug && ctest --output-on-failure --repeat-until-fail 3
 
       - name: 'Create tarball'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'

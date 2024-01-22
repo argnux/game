@@ -31,6 +31,8 @@ enable_testing()
 add_executable(game_test test/game_test.cc
         game_src/GameApplication.cpp)
 target_link_libraries(game_test PRIVATE log engine SDL3::Headers SDL3::SDL3-shared SDL3_image::SDL3_image-shared GTest::gtest_main)
+include(GoogleTest)
+gtest_discover_tests(game_test)
 
 set(CMAKE_SKIP_BUILD_RPATH FALSE)
 set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
