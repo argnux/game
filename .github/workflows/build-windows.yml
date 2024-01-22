@@ -68,7 +68,7 @@ jobs:
       - name: 'Test'
         run: |
           cmake --build ${{github.workspace}}/cmake-build-debug --target game_test -j 6
-          ${{github.workspace}}/cmake-build-debug/Debug/game_test --gtest_filter=* --gtest_color=no
+          ${{github.workspace}}/cmake-build-debug/Debug/game_test
 
       - name: 'Create shortcut'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'
