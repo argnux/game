@@ -66,7 +66,9 @@ jobs:
         working-directory: ${{github.workspace}}/cmake-build-debug/Debug
 
       - name: 'Test'
-        run: call "${{github.workspace}}/cmake-build-debug/Debug/game_test.exe"
+        run: |
+          cmake --build ${{github.workspace}}/cmake-build-debug --target game_test -j 6
+          call "${{github.workspace}}/cmake-build-debug/Debug/game_test.exe"
 
       - name: 'Create shortcut'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'

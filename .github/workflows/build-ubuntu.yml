@@ -60,6 +60,7 @@ jobs:
 
       - name: 'Test'
         run: |
+          cmake --build ${{github.workspace}}/cmake-build-debug --target game_test -j 6
           ${{github.workspace}}/cmake-build-debug/game_test --gtest_filter=* --gtest_color=no
 
       - name: 'Create tarball'
