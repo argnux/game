@@ -30,7 +30,7 @@ jobs:
       - name: 'Update packages'
         run: |
           sudo apt update
-          sudo apt install ninja-build -y
+          sudo apt install ninja-build mesa-utils -y
 
       - name: 'Build SDL3'
         run: |
@@ -57,6 +57,11 @@ jobs:
           cmake -DCMAKE_PREFIX_PATH="${{ env.SDL3_PATH }}" -DCMAKE_INSTALL_PREFIX=${{ env.GAME_PATH }} -DCMAKE_BUILD_TYPE=Debug -G Ninja -S ${{github.workspace}} -B ${{github.workspace}}/cmake-build-debug
           cmake --build ${{github.workspace}}/cmake-build-debug --target game -j 6
           cmake --install ${{github.workspace}}/cmake-build-debug --config Debug
+
+      - name: 'Test'
+        run: |
+          cmake --build ${{github.workspace}}/cmake-build-debug --target game_test -j 6
+          cd ${{github.workspace}}/cmake-build-debug && ctest --output-on-failure --repeat-until-fail 3
 
       - name: 'Create tarball'
         if: github.event.inputs.upload_game == 'true' || github.ref == 'refs/heads/main'

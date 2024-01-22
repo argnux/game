@@ -5,12 +5,20 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
-set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-set(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+set(INSTALL_GTEST OFF)
 
 find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
 find_package(SDL3_image REQUIRED CONFIG REQUIRED COMPONENTS SDL3_image-shared)
+
+# Fetch GoogleTest
+include(FetchContent)
+FetchContent_Declare(
+        googletest
+        URL https://github.com/google/googletest/archive/03597a01ee50ed33e9dfd640b249b4be3799d395.zip
+)
+# For Windows: Prevent overriding the parent project's compiler/linker settings
+set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+FetchContent_MakeAvailable(googletest)
 
 include_directories(log)
 include_directories(engine/include)
@@ -18,6 +26,26 @@ include_directories(game_src)
 
 add_subdirectory(${CMAKE_SOURCE_DIR}/log)
 add_subdirectory(${CMAKE_SOURCE_DIR}/engine)
+
+enable_testing()
+add_executable(game_test test/game_test.cc
+        game_src/GameApplication.cpp)
+target_link_libraries(game_test PRIVATE log engine SDL3::Headers SDL3::SDL3-shared SDL3_image::SDL3_image-shared GTest::gtest_main)
+
+if(WIN32)
+    add_custom_command(
+        TARGET game_test POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:game_test> $<TARGET_FILE_DIR:game_test>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
+include(GoogleTest)
+gtest_discover_tests(game_test)
+
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
+set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+set(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 
 add_executable(game game_src/main.cpp
         game_src/GameApplication.cpp
