@@ -31,6 +31,15 @@ enable_testing()
 add_executable(game_test test/game_test.cc
         game_src/GameApplication.cpp)
 target_link_libraries(game_test PRIVATE log engine SDL3::Headers SDL3::SDL3-shared SDL3_image::SDL3_image-shared GTest::gtest_main)
+
+if(WIN32)
+    add_custom_command(
+        TARGET game_test POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_RUNTIME_DLLS:game_test> $<TARGET_FILE_DIR:game_test>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
+
 include(GoogleTest)
 gtest_discover_tests(game_test)
 
