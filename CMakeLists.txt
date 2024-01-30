@@ -43,7 +43,9 @@ if((NOT ${SDL3_FOUND}) AND (NOT ${SDL3_image_FOUND}))
     # so you may have to reload project after first build
     add_custom_target(Rescan ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR} DEPENDS sdl sdl_image)
 
-    add_executable(game)
+    add_executable(game
+            game_src/dummy_main.cpp
+    )
 else()
     #Rescan becomes a dummy target after first build
     #this prevents cmake from rebuilding cache/projects on subsequent builds
@@ -52,7 +54,8 @@ else()
     add_subdirectory(${CMAKE_SOURCE_DIR}/log)
     add_subdirectory(${CMAKE_SOURCE_DIR}/engine)
 
-    add_executable(game game_src/main.cpp
+    add_executable(game
+            game_src/main.cpp
             game_src/GameApplication.cpp
     )
     target_link_libraries(game PRIVATE log engine SDL3::SDL3 SDL3_image::SDL3_image)
