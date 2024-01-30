@@ -10,5 +10,4 @@ add_library(engine
         src/object/Item.cpp
         src/sprite/BuildingSprite.cpp
 )
-
-target_link_libraries(engine PRIVATE log SDL3::SDL3-shared SDL3_image::SDL3_image-shared)
+target_link_libraries(engine PRIVATE log SDL3::SDL3 SDL3_image::SDL3_image)
