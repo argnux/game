@@ -30,7 +30,7 @@ ExternalProject_Add(sdl
 ExternalProject_Add(sdl_image
         GIT_REPOSITORY https://github.com/libsdl-org/SDL_image.git
         GIT_TAG main
-        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION} -DCMAKE_PREFIX_PATH=${EXTERNAL_INSTALL_LOCATION}
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
 )
 
 include_directories(log)
