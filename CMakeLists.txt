@@ -12,9 +12,14 @@ set(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 set(INSTALL_BINARY_PATH "${CMAKE_INSTALL_PREFIX}/bin")
 set(INSTALL_RESOURCE_PATH "${CMAKE_INSTALL_PREFIX}/res")
 
-include(ExternalProject)
-
 set(EXTERNAL_INSTALL_LOCATION ${CMAKE_BINARY_DIR}/external)
+include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
+set(CMAKE_PREFIX_PATH ${EXTERNAL_INSTALL_LOCATION})
+
+find_package(SDL3 CONFIG COMPONENTS SDL3-shared)
+find_package(SDL3_image CONFIG COMPONENTS SDL3_image-shared)
+
+include(ExternalProject)
 
 ExternalProject_Add(sdl
         GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
@@ -28,12 +33,6 @@ ExternalProject_Add(sdl_image
         CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${EXTERNAL_INSTALL_LOCATION}
 )
 
-include_directories(${EXTERNAL_INSTALL_LOCATION}/include)
-set(CMAKE_PREFIX_PATH ${EXTERNAL_INSTALL_LOCATION})
-
-find_package(SDL3 REQUIRED CONFIG REQUIRED COMPONENTS SDL3-shared)
-find_package(SDL3_image REQUIRED CONFIG REQUIRED COMPONENTS SDL3_image-shared)
-
 include_directories(log)
 include_directories(engine/include)
 include_directories(game_src)
@@ -41,18 +40,38 @@ include_directories(game_src)
 add_subdirectory(${CMAKE_SOURCE_DIR}/log)
 add_subdirectory(${CMAKE_SOURCE_DIR}/engine)
 
+if((NOT ${SDL3_FOUND}) AND (NOT ${SDL3_image_FOUND}))
+    # rerun cmake in initial build
+    # will update cmakecache/project files on first build
+    # so you may have to reload project after first build
+    add_custom_target(Rescan ${CMAKE_COMMAND} ${CMAKE_SOURCE_DIR} DEPENDS sdl sdl_image)
+else()
+    #Rescan becomes a dummy target after first build
+    #this prevents cmake from rebuilding cache/projects on subsequent builds
+    add_custom_target(Rescan)
+endif()
+
 add_executable(game game_src/main.cpp
         game_src/GameApplication.cpp
 )
-target_link_libraries(game PRIVATE log engine SDL3::SDL3 SDL3_image::SDL3_image)
+add_dependencies(game Rescan)
+
+if (${SDL3_FOUND} AND ${SDL3_image_FOUND})
+    target_link_libraries(game PRIVATE log engine SDL3::SDL3 SDL3_image::SDL3_image)
+endif ()
 
 if (WIN32)
     add_compile_options(-static-libgcc -static-libstdc++ --static)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -static-libgcc -static-libstdc++ --static")
 endif ()
 
-install(IMPORTED_RUNTIME_ARTIFACTS SDL3::SDL3-shared DESTINATION ${INSTALL_BINARY_PATH})
-install(IMPORTED_RUNTIME_ARTIFACTS SDL3_image::SDL3_image-shared DESTINATION ${INSTALL_BINARY_PATH})
-install(IMPORTED_RUNTIME_ARTIFACTS game DESTINATION ${INSTALL_BINARY_PATH})
+if (${SDL3_FOUND})
+    install(IMPORTED_RUNTIME_ARTIFACTS SDL3::SDL3-shared DESTINATION ${INSTALL_BINARY_PATH})
+endif ()
 
+if (${SDL3_image_FOUND})
+    install(IMPORTED_RUNTIME_ARTIFACTS SDL3_image::SDL3_image-shared DESTINATION ${INSTALL_BINARY_PATH})
+endif ()
+
+install(IMPORTED_RUNTIME_ARTIFACTS game DESTINATION ${INSTALL_BINARY_PATH})
 install(DIRECTORY ${CMAKE_SOURCE_DIR}/res/png DESTINATION ${INSTALL_RESOURCE_PATH} FILES_MATCHING PATTERN "*.png")
