@@ -10,7 +10,4 @@ add_library(engine
         src/object/Item.cpp
         src/sprite/BuildingSprite.cpp
 )
-
-if (${SDL3_FOUND} AND ${SDL3_image_FOUND})
-    target_link_libraries(engine PRIVATE log SDL3::SDL3 SDL3_image::SDL3_image)
-endif ()
+target_link_libraries(engine PRIVATE log SDL3::SDL3 SDL3_image::SDL3_image)
